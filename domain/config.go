@@ -11,7 +11,7 @@ type Config struct {
 	MinFinetuneNameLength int `json:"min_finetune_name_length"`
 
 	// Key is the finetue model name
-	Finetunes map[string]FinetuneParameterConfig `json:"fintunes" required:"true"`
+	Finetunes map[string]FinetuneParameterConfig `json:"finetunes" required:"true"`
 }
 
 func (r *Config) SetDefault() {
