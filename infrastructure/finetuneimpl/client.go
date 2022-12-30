@@ -4,28 +4,39 @@ import (
 	"bytes"
 	"errors"
 	"net/http"
+	"strings"
 
 	"github.com/opensourceways/community-robot-lib/utils"
 )
 
-func newClient(cfg *Config) client {
-	return client{
-		cfg: *cfg,
-		hc:  utils.NewHttpClient(3),
+func newClient(cfg *Config) (client, error) {
+	v, err := utils.JsonMarshal(&tokenRequest{
+		User:     cfg.Username,
+		Password: cfg.Password,
+	})
+	if err != nil {
+		return client{}, err
 	}
+
+	return client{
+		endpoint: strings.TrimSuffix(cfg.Endpoint, "/"),
+		tokenReq: v,
+		hc:       utils.NewHttpClient(3),
+	}, nil
 }
 
 type client struct {
-	cfg Config
-	hc  utils.HttpClient
+	endpoint string
+	tokenReq []byte
+	hc       utils.HttpClient
 }
 
 func (cli *client) tokenURL() string {
-	return cli.cfg.Endpoint + "/foundation-model/token"
+	return cli.endpoint + "/foundation-model/token"
 }
 
 func (cli *client) createURL() string {
-	return cli.cfg.Endpoint + "/v1/foundation-model/finetune"
+	return cli.endpoint + "/v1/foundation-model/finetune"
 }
 
 func (cli *client) jobURL(jobId string) string {
@@ -37,16 +48,8 @@ func (cli *client) logURL(jobId string) string {
 }
 
 func (cli *client) token() (t string, err error) {
-	payload, err := utils.JsonMarshal(&tokenRequest{
-		User:     cli.cfg.Username,
-		Password: cli.cfg.Password,
-	})
-	if err != nil {
-		return
-	}
-
 	req, err := http.NewRequest(
-		http.MethodPost, cli.tokenURL(), bytes.NewBuffer(payload),
+		http.MethodPost, cli.tokenURL(), bytes.NewBuffer(cli.tokenReq),
 	)
 	if err != nil {
 		return

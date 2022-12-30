@@ -18,10 +18,13 @@ var statusMap = map[string]domain.FinetuneStatus{
 	"terminating": domain.FinetuneStatusTerminating,
 }
 
-func NewFinetune(cfg *Config) finetune.Finetune {
-	return finetuneImpl{
-		cli: newClient(cfg),
+func NewFinetune(cfg *Config) (finetune.Finetune, error) {
+	cli, err := newClient(cfg)
+	if err != nil {
+		return nil, err
 	}
+
+	return finetuneImpl{cli: cli}, nil
 }
 
 type finetuneImpl struct {
