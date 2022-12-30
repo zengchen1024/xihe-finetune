@@ -64,10 +64,7 @@ func main() {
 	cfg.InitDomain()
 
 	// finetune
-	fs, err := finetuneimpl.NewFinetune(&cfg.Finetune)
-	if err != nil {
-		logrus.Fatalf("new finetune center, err:%s", err.Error())
-	}
+	fs := finetuneimpl.NewFinetune(&cfg.Finetune)
 
 	// watch
 	ws, err := watchimpl.NewWatcher(&cfg.Watch, fs)

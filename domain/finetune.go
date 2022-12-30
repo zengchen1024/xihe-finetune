@@ -2,6 +2,12 @@ package domain
 
 import "errors"
 
+type Finetune struct {
+	Id string
+
+	FinetuneConfig
+}
+
 type FinetuneConfig struct {
 	Name  FinetuneName
 	Param FinetuneParameter

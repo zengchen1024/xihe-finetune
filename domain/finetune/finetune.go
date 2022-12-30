@@ -3,7 +3,7 @@ package finetune
 import "github.com/opensourceways/xihe-finetune/domain"
 
 type Finetune interface {
-	Create(domain.Account, *domain.FinetuneConfig) (domain.JobInfo, error)
+	Create(domain.Account, *domain.Finetune) (domain.JobInfo, error)
 	Delete(string) error
 	Terminate(string) error
 

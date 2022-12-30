@@ -10,9 +10,7 @@ import (
 
 type FinetuneCreateCmd struct {
 	User domain.Account
-	Id   string
-
-	domain.FinetuneConfig
+	domain.Finetune
 }
 
 func (cmd *FinetuneCreateCmd) Validate() error {
@@ -62,7 +60,7 @@ func (s *finetuneService) Create(cmd *FinetuneCreateCmd) (JobInfoDTO, string, er
 	code := ""
 
 	f := func(info *watch.FinetuneInfo) error {
-		v, err := s.ts.Create(cmd.User, &cmd.FinetuneConfig)
+		v, err := s.ts.Create(cmd.User, &cmd.Finetune)
 		if err != nil {
 			// TODO check parameter error
 			return err
