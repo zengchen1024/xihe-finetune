@@ -5,10 +5,6 @@ type Config struct {
 	// that check all trainings in a loop.
 	Interval int `json:"interval"`
 
-	// Timeout specifies the time that a training can live
-	// The unit is second.
-	Timeout int `json:"timeout"`
-
 	Endpoint    string `json:"endpoint"      required:"true"`
 	MaxWatchNum int    `json:"max_watch_num" required:"true"`
 }
@@ -16,9 +12,5 @@ type Config struct {
 func (cfg *Config) SetDefault() {
 	if cfg.Interval <= 0 {
 		cfg.Interval = 10
-	}
-
-	if cfg.Timeout <= 0 {
-		cfg.Timeout = 86400
 	}
 }

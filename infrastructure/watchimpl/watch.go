@@ -24,7 +24,6 @@ func NewWatcher(cfg *Config, fs finetune.Finetune) (*Watcher, error) {
 	return &Watcher{
 		cli:         cli,
 		fs:          fs,
-		timeout:     cfg.Timeout,
 		interval:    time.Duration(cfg.Interval) * time.Second,
 		stop:        make(chan struct{}),
 		stopped:     make(chan struct{}),
@@ -38,9 +37,7 @@ type finetuneInfo struct {
 
 	result finetuneData
 
-	done         bool
-	success      bool
-	notifyFailed bool
+	done bool
 }
 
 func (t *finetuneInfo) toIndex() pt.FinetuneIndex {
@@ -59,7 +56,6 @@ type Watcher struct {
 	cli *client.FinetuneClient
 	fs  finetune.Finetune
 
-	timeout  int
 	interval time.Duration
 
 	stop      chan struct{}
@@ -191,7 +187,6 @@ func (w *Watcher) check(info *finetuneInfo) (changed bool) {
 
 		if detail.Status.IsDone() {
 			info.done = true
-			info.success = detail.Status.IsSuccess()
 		}
 	}
 

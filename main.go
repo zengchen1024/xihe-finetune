@@ -10,7 +10,6 @@ import (
 
 	"github.com/opensourceways/xihe-finetune/app"
 	"github.com/opensourceways/xihe-finetune/config"
-	"github.com/opensourceways/xihe-finetune/domain"
 	"github.com/opensourceways/xihe-finetune/infrastructure/finetuneimpl"
 	"github.com/opensourceways/xihe-finetune/infrastructure/watchimpl"
 	"github.com/opensourceways/xihe-finetune/server"
@@ -62,21 +61,21 @@ func main() {
 	}
 
 	// domain
-	domain.Init(&cfg.Domain)
+	cfg.InitDomain()
 
 	// finetune
-	ts, err := finetuneimpl.NewFinetune(&cfg.Finetune)
+	fs, err := finetuneimpl.NewFinetune(&cfg.Finetune)
 	if err != nil {
 		logrus.Fatalf("new finetune center, err:%s", err.Error())
 	}
 
 	// watch
-	ws, err := watchimpl.NewWatcher(&cfg.Watch, ts)
+	ws, err := watchimpl.NewWatcher(&cfg.Watch, fs)
 	if err != nil {
 		logrus.Errorf("new watch service failed, err:%s", err.Error())
 	}
 
-	service := app.NewFinetuneService(ts, ws)
+	service := app.NewFinetuneService(fs, ws)
 
 	go ws.Run()
 

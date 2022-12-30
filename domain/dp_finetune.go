@@ -76,44 +76,6 @@ func (r finetuneName) FinetuneName() string {
 	return string(r)
 }
 
-// CustomizedKey
-type CustomizedKey interface {
-	CustomizedKey() string
-}
-
-func NewCustomizedKey(v string) (CustomizedKey, error) {
-	if v == "" {
-		return nil, errors.New("empty key")
-	}
-
-	return customizedKey(v), nil
-}
-
-type customizedKey string
-
-func (r customizedKey) CustomizedKey() string {
-	return string(r)
-}
-
-// CustomizedValue
-type CustomizedValue interface {
-	CustomizedValue() string
-}
-
-func NewCustomizedValue(v string) (CustomizedValue, error) {
-	if v == "" {
-		return nil, nil
-	}
-
-	return customizedValue(v), nil
-}
-
-type customizedValue string
-
-func (r customizedValue) CustomizedValue() string {
-	return string(r)
-}
-
 // FinetuneStatus
 type FinetuneStatus interface {
 	FinetuneStatus() string

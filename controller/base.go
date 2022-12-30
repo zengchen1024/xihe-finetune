@@ -12,9 +12,10 @@ type baseController struct{}
 func (ctl baseController) sendCodeMessage(ctx *gin.Context, code string, err error) {
 	data := newResponseCodeError(code, err)
 
-	if code == "" {
+	if data.Code == "" {
 		logrus.Errorf("system err: %v", err)
 
+		data.Code = errorSystemError
 		ctx.JSON(http.StatusInternalServerError, data)
 	} else {
 		ctx.JSON(http.StatusBadRequest, data)

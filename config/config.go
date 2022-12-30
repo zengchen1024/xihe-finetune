@@ -16,13 +16,13 @@ type configValidate interface {
 	Validate() error
 }
 
-type configuration struct {
+type Config struct {
 	Watch    watchimpl.Config    `json:"watch"        required:"true"`
 	Domain   domain.Config       `json:"domain"       required:"true"`
 	Finetune finetuneimpl.Config `json:"finetune"     required:"true"`
 }
 
-func (cfg *configuration) configItems() []interface{} {
+func (cfg *Config) configItems() []interface{} {
 	return []interface{}{
 		&cfg.Watch,
 		&cfg.Domain,
@@ -30,7 +30,7 @@ func (cfg *configuration) configItems() []interface{} {
 	}
 }
 
-func (cfg *configuration) validate() error {
+func (cfg *Config) validate() error {
 	if _, err := utils.BuildRequestBody(cfg, ""); err != nil {
 		return err
 	}
@@ -48,7 +48,7 @@ func (cfg *configuration) validate() error {
 	return nil
 }
 
-func (cfg *configuration) setDefault() {
+func (cfg *Config) setDefault() {
 	items := cfg.configItems()
 
 	for _, i := range items {
@@ -58,8 +58,12 @@ func (cfg *configuration) setDefault() {
 	}
 }
 
-func LoadConfig(path string) (*configuration, error) {
-	v := new(configuration)
+func (cfg *Config) InitDomain() {
+	domain.Init(&cfg.Domain)
+}
+
+func LoadConfig(path string) (*Config, error) {
+	v := new(Config)
 
 	if err := utils.LoadFromYaml(path, v); err != nil {
 		return nil, err
