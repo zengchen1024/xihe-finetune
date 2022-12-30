@@ -1,0 +1,120 @@
+definitions:
+  app.JobInfoDTO:
+    properties:
+      job_id:
+        type: string
+    type: object
+  app.LogURLDTO:
+    properties:
+      url:
+        type: string
+    type: object
+  controller.FinetuneCreateRequest:
+    properties:
+      hyperparameter:
+        additionalProperties:
+          type: string
+        type: object
+      id:
+        type: string
+      model:
+        type: string
+      name:
+        type: string
+      task:
+        type: string
+      user:
+        type: string
+    type: object
+info:
+  contact: {}
+paths:
+  /v1/finetune:
+    post:
+      consumes:
+      - application/json
+      description: create finetune
+      parameters:
+      - description: body of creating finetune
+        in: body
+        name: body
+        required: true
+        schema:
+          $ref: '#/definitions/controller.FinetuneCreateRequest'
+      responses:
+        "201":
+          description: Created
+          schema:
+            $ref: '#/definitions/app.JobInfoDTO'
+        "500":
+          description: Internal Server Error
+          schema:
+            type: system_error
+      summary: Create
+      tags:
+      - Finetune
+  /v1/finetune/{id}:
+    delete:
+      consumes:
+      - application/json
+      description: delete finetune
+      parameters:
+      - description: id of finetune
+        in: path
+        name: id
+        required: true
+        type: string
+      responses:
+        "204":
+          description: ""
+        "500":
+          description: Internal Server Error
+          schema:
+            type: system_error
+      summary: Delete
+      tags:
+      - Finetune
+    put:
+      consumes:
+      - application/json
+      description: terminate finetune
+      parameters:
+      - description: id of finetune
+        in: path
+        name: id
+        required: true
+        type: string
+      responses:
+        "202":
+          description: ""
+        "500":
+          description: Internal Server Error
+          schema:
+            type: system_error
+      summary: Terminate
+      tags:
+      - Finetune
+  /v1/finetune/{id}/log:
+    get:
+      consumes:
+      - application/json
+      description: get log url of finetune for downloading
+      parameters:
+      - description: id of finetune
+        in: path
+        name: id
+        required: true
+        type: string
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/app.LogURLDTO'
+        "500":
+          description: Internal Server Error
+          schema:
+            type: system_error
+      summary: GetLog
+      tags:
+      - Finetune
+swagger: "2.0"
