@@ -13,9 +13,10 @@ type tokenRequest struct {
 }
 
 type tokenResp struct {
+	response
+
 	Duration int64  `json:"duration"`
 	Token    string `json:"token"`
-	Msg      string `json:"msg"`
 }
 
 // create
@@ -40,9 +41,9 @@ type createResp struct {
 
 // get
 type getResp struct {
-	Status int        `json:"status"`
-	Msg    string     `json:"msg"`
-	Data   detailData `json:"data"`
+	response
+
+	Data detailData `json:"data"`
 }
 
 type detailData struct {
