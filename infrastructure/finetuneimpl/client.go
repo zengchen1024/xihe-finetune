@@ -60,7 +60,7 @@ func (cli *client) token() (t string, err error) {
 		return
 	}
 
-	if resp.Msg != "" {
+	if resp.Status != 200 {
 		err = errors.New(resp.Msg)
 	} else {
 		t = resp.Token
